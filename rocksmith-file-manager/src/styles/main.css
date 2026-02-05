@@ -178,8 +178,15 @@ textarea {
 
 .file-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-md);
+}
+
+/* Two columns on tablet */
+@media (max-width: 1024px) {
+  .file-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Single column on mobile */

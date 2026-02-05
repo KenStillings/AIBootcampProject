@@ -14,7 +14,7 @@ export interface PaginationState {
 class PaginationService {
   private state: PaginationState = {
     currentPage: 1,
-    itemsPerPage: 50, // 2 columns × 25 items per column
+    itemsPerPage: 21, // 3 columns × 7 items per column
     totalItems: 0,
     totalPages: 0
   };

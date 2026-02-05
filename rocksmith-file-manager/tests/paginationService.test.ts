@@ -11,9 +11,9 @@ describe('PaginationService', () => {
       const state = paginationService.getState();
       
       expect(state.totalItems).toBe(100);
-      expect(state.totalPages).toBe(2); // 100 items / 50 per page = 2 pages
+      expect(state.totalPages).toBe(5); // 100 items / 21 per page = 5 pages
       expect(state.currentPage).toBe(1);
-      expect(state.itemsPerPage).toBe(50);
+      expect(state.itemsPerPage).toBe(21);
     });
 
     test('should calculate total pages with partial last page', () => {
@@ -21,11 +21,11 @@ describe('PaginationService', () => {
       const state = paginationService.getState();
       
       expect(state.totalItems).toBe(75);
-      expect(state.totalPages).toBe(2); // 75 items = 2 pages (50 + 25)
+      expect(state.totalPages).toBe(4); // 75 items = 4 pages (21+21+21+12)
     });
 
     test('should handle single page correctly', () => {
-      paginationService.initialize(30);
+      paginationService.initialize(20);
       const state = paginationService.getState();
       
       expect(state.totalPages).toBe(1);
@@ -52,7 +52,7 @@ describe('PaginationService', () => {
 
   describe('setPage', () => {
     beforeEach(() => {
-      paginationService.initialize(150); // 3 pages
+      paginationService.initialize(150); // 8 pages
     });
 
     test('should set valid page number', () => {
@@ -71,19 +71,19 @@ describe('PaginationService', () => {
 
     test('should ignore page number greater than total pages', () => {
       paginationService.setPage(2);
-      paginationService.setPage(5); // Only 3 pages available
+      paginationService.setPage(10); // Only 8 pages available
       expect(paginationService.getState().currentPage).toBe(2);
     });
 
     test('should accept last page', () => {
-      paginationService.setPage(3);
-      expect(paginationService.getState().currentPage).toBe(3);
+      paginationService.setPage(8);
+      expect(paginationService.getState().currentPage).toBe(8);
     });
   });
 
   describe('nextPage', () => {
     beforeEach(() => {
-      paginationService.initialize(150); // 3 pages
+      paginationService.initialize(150); // 8 pages
     });
 
     test('should move to next page', () => {
@@ -92,9 +92,9 @@ describe('PaginationService', () => {
     });
 
     test('should not exceed total pages', () => {
-      paginationService.setPage(3);
+      paginationService.setPage(8);
       paginationService.nextPage();
-      expect(paginationService.getState().currentPage).toBe(3);
+      expect(paginationService.getState().currentPage).toBe(8);
     });
 
     test('should work from first page', () => {
@@ -106,7 +106,7 @@ describe('PaginationService', () => {
 
   describe('previousPage', () => {
     beforeEach(() => {
-      paginationService.initialize(150); // 3 pages
+      paginationService.initialize(150); // 8 pages
     });
 
     test('should move to previous page', () => {
@@ -121,9 +121,9 @@ describe('PaginationService', () => {
     });
 
     test('should work from last page', () => {
-      paginationService.setPage(3);
+      paginationService.setPage(8);
       paginationService.previousPage();
-      expect(paginationService.getState().currentPage).toBe(2);
+      expect(paginationService.getState().currentPage).toBe(7);
     });
   });
 
@@ -144,20 +144,20 @@ describe('PaginationService', () => {
 
   describe('lastPage', () => {
     test('should navigate to last page', () => {
-      paginationService.initialize(150); // 3 pages
+      paginationService.initialize(150); // 8 pages
       paginationService.lastPage();
-      expect(paginationService.getState().currentPage).toBe(3);
+      expect(paginationService.getState().currentPage).toBe(8);
     });
 
     test('should work when already on last page', () => {
       paginationService.initialize(150);
       paginationService.lastPage();
       paginationService.lastPage();
-      expect(paginationService.getState().currentPage).toBe(3);
+      expect(paginationService.getState().currentPage).toBe(8);
     });
 
     test('should handle single page', () => {
-      paginationService.initialize(30);
+      paginationService.initialize(20);
       paginationService.lastPage();
       expect(paginationService.getState().currentPage).toBe(1);
     });
@@ -167,30 +167,30 @@ describe('PaginationService', () => {
     const testData = Array.from({ length: 125 }, (_, i) => i + 1);
 
     beforeEach(() => {
-      paginationService.initialize(testData.length); // 3 pages (50 + 50 + 25)
+      paginationService.initialize(testData.length); // 6 pages (21*5 + 20)
     });
 
     test('should return first page slice', () => {
       const slice = paginationService.getCurrentPageSlice(testData);
-      expect(slice).toHaveLength(50);
+      expect(slice).toHaveLength(21);
       expect(slice[0]).toBe(1);
-      expect(slice[49]).toBe(50);
+      expect(slice[20]).toBe(21);
     });
 
     test('should return second page slice', () => {
       paginationService.setPage(2);
       const slice = paginationService.getCurrentPageSlice(testData);
-      expect(slice).toHaveLength(50);
-      expect(slice[0]).toBe(51);
-      expect(slice[49]).toBe(100);
+      expect(slice).toHaveLength(21);
+      expect(slice[0]).toBe(22);
+      expect(slice[20]).toBe(42);
     });
 
     test('should return last page slice with partial data', () => {
-      paginationService.setPage(3);
+      paginationService.setPage(6);
       const slice = paginationService.getCurrentPageSlice(testData);
-      expect(slice).toHaveLength(25);
-      expect(slice[0]).toBe(101);
-      expect(slice[24]).toBe(125);
+      expect(slice).toHaveLength(20);
+      expect(slice[0]).toBe(106);
+      expect(slice[19]).toBe(125);
     });
 
     test('should return empty array for empty data', () => {
@@ -209,34 +209,34 @@ describe('PaginationService', () => {
 
   describe('getPageRange', () => {
     test('should return all pages when total pages <= maxPages', () => {
-      paginationService.initialize(150); // 3 pages
+      paginationService.initialize(150); // 8 pages
       const range = paginationService.getPageRange();
-      expect(range).toEqual([1, 2, 3]);
+      expect(range).toEqual([1, 2, 3, 4, 5, 6, 7]);
     });
 
     test('should center current page when in middle', () => {
-      paginationService.initialize(500); // 10 pages
-      paginationService.setPage(5);
+      paginationService.initialize(500); // 24 pages
+      paginationService.setPage(12);
       const range = paginationService.getPageRange(7);
-      expect(range).toEqual([2, 3, 4, 5, 6, 7, 8]); // Center 5 with 3 on each side
+      expect(range).toEqual([9, 10, 11, 12, 13, 14, 15]); // Center 12 with 3 on each side
     });
 
     test('should start from page 1 when current page is near start', () => {
-      paginationService.initialize(500); // 10 pages
+      paginationService.initialize(500); // 24 pages
       paginationService.setPage(2);
       const range = paginationService.getPageRange(7);
       expect(range).toEqual([1, 2, 3, 4, 5, 6, 7]);
     });
 
     test('should end at last page when current page is near end', () => {
-      paginationService.initialize(500); // 10 pages
-      paginationService.setPage(9);
+      paginationService.initialize(500); // 24 pages
+      paginationService.setPage(22);
       const range = paginationService.getPageRange(7);
-      expect(range).toEqual([4, 5, 6, 7, 8, 9, 10]);
+      expect(range).toEqual([18, 19, 20, 21, 22, 23, 24]);
     });
 
     test('should handle single page', () => {
-      paginationService.initialize(30);
+      paginationService.initialize(20);
       const range = paginationService.getPageRange();
       expect(range).toEqual([1]);
     });
@@ -248,8 +248,8 @@ describe('PaginationService', () => {
     });
 
     test('should use default maxPages of 7', () => {
-      paginationService.initialize(500); // 10 pages
-      paginationService.setPage(5);
+      paginationService.initialize(500); // 24 pages
+      paginationService.setPage(12);
       const range = paginationService.getPageRange();
       expect(range).toHaveLength(7);
     });
@@ -265,7 +265,7 @@ describe('PaginationService', () => {
       expect(state.currentPage).toBe(1);
       expect(state.totalItems).toBe(0);
       expect(state.totalPages).toBe(0);
-      expect(state.itemsPerPage).toBe(50);
+      expect(state.itemsPerPage).toBe(21);
     });
 
     test('should allow re-initialization after reset', () => {
@@ -277,13 +277,13 @@ describe('PaginationService', () => {
       const state = paginationService.getState();
       expect(state.currentPage).toBe(1);
       expect(state.totalItems).toBe(200);
-      expect(state.totalPages).toBe(4);
+      expect(state.totalPages).toBe(10);
     });
   });
 
   describe('hasNextPage', () => {
     test('should return true when not on last page', () => {
-      paginationService.initialize(150); // 3 pages
+      paginationService.initialize(150); // 8 pages
       expect(paginationService.hasNextPage()).toBe(true);
       
       paginationService.setPage(2);
@@ -291,13 +291,13 @@ describe('PaginationService', () => {
     });
 
     test('should return false when on last page', () => {
-      paginationService.initialize(150); // 3 pages
-      paginationService.setPage(3);
+      paginationService.initialize(150); // 8 pages
+      paginationService.setPage(8);
       expect(paginationService.hasNextPage()).toBe(false);
     });
 
     test('should return false for single page', () => {
-      paginationService.initialize(30);
+      paginationService.initialize(20);
       expect(paginationService.hasNextPage()).toBe(false);
     });
 
@@ -309,21 +309,21 @@ describe('PaginationService', () => {
 
   describe('hasPreviousPage', () => {
     test('should return false when on first page', () => {
-      paginationService.initialize(150); // 3 pages
+      paginationService.initialize(150); // 8 pages
       expect(paginationService.hasPreviousPage()).toBe(false);
     });
 
     test('should return true when not on first page', () => {
-      paginationService.initialize(150); // 3 pages
+      paginationService.initialize(150); // 8 pages
       paginationService.setPage(2);
       expect(paginationService.hasPreviousPage()).toBe(true);
       
-      paginationService.setPage(3);
+      paginationService.setPage(8);
       expect(paginationService.hasPreviousPage()).toBe(true);
     });
 
     test('should return false for single page', () => {
-      paginationService.initialize(30);
+      paginationService.initialize(20);
       expect(paginationService.hasPreviousPage()).toBe(false);
     });
 
@@ -334,14 +334,14 @@ describe('PaginationService', () => {
   });
 
   describe('edge cases', () => {
-    test('should handle exactly 50 items (1 page)', () => {
-      paginationService.initialize(50);
+    test('should handle exactly 21 items (1 page)', () => {
+      paginationService.initialize(21);
       const state = paginationService.getState();
       expect(state.totalPages).toBe(1);
     });
 
-    test('should handle 51 items (2 pages)', () => {
-      paginationService.initialize(51);
+    test('should handle 22 items (2 pages)', () => {
+      paginationService.initialize(22);
       const state = paginationService.getState();
       expect(state.totalPages).toBe(2);
     });
@@ -349,7 +349,7 @@ describe('PaginationService', () => {
     test('should handle large dataset', () => {
       paginationService.initialize(1348); // User's FileList.csv size
       const state = paginationService.getState();
-      expect(state.totalPages).toBe(27); // ceiling(1348/50) = 27
+      expect(state.totalPages).toBe(65); // ceiling(1348/21) = 65
     });
 
     test('should maintain consistency across multiple operations', () => {
