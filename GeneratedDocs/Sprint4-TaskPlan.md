@@ -34,13 +34,13 @@ Before starting Sprint 4, ensure Sprint 3 is complete:
 #### Subtasks Checklist
 
 - [ ] Create `src/scripts/csvParser.ts`
-- [ ] Implement comma-delimited string parser
+- [ ] Implement parser that handles both newline and comma-delimited formats
 - [ ] Handle trimming of whitespace
 - [ ] Remove empty entries
-- [ ] Handle various CSV formats (with/without spaces)
+- [ ] Handle various formats (newlines, commas, with/without spaces)
 - [ ] Return array of file names
 - [ ] Add error handling for malformed input
-- [ ] Support semicolon as alternative delimiter (optional)
+- [ ] Auto-detect format (newline-first, then comma)
 - [ ] Add JSDoc comments
 - [ ] Write unit tests for parser
 
@@ -48,20 +48,22 @@ Before starting Sprint 4, ensure Sprint 3 is complete:
 
 ```typescript
 /**
- * Parses a comma-delimited string of file names
- * @param csvString - The CSV string to parse
+ * Parses a string of file names (supports newline or comma-delimited)
+ * @param input - The input string to parse
  * @returns Array of file names (trimmed, no empties)
  */
-export function parseCSV(csvString: string): string[] {
-  if (!csvString || csvString.trim() === '') {
+export function parseCSV(input: string): string[] {
+  if (!input || input.trim() === '') {
     return [];
   }
   
-  // Split by comma, trim each entry, filter out empties
-  const fileNames = csvString
-    .split(',')
-    .map(name => name.trim())
-    .filter(name => name.length > 0);
+  // Try splitting by newlines first (handles line-delimited format)
+  let fileNames = input.split(/\r?\n/).map(name => name.trim()).filter(name => name.length > 0);
+  
+  // If only one line, try comma-delimited format
+  if (fileNames.length === 1 && fileNames[0].includes(',')) {
+    fileNames = fileNames[0].split(',').map(name => name.trim()).filter(name => name.length > 0);
+  }
   
   return fileNames;
 }
@@ -90,9 +92,18 @@ export function validateCSV(csvString: string): {
 }
 ```
 
-#### Supported CSV Formats
+#### Supported Formats
 
 The parser should handle:
+
+**Newline-delimited (preferred for large lists):**
+```
+file1.psarc
+file2.psarc
+file3.psarc
+```
+
+**Comma-delimited:**
 ```
 file1.psarc, file2.psarc, file3.psarc
 file1.psarc,file2.psarc,file3.psarc
@@ -104,6 +115,10 @@ And filter out:
 file1.psarc, , file2.psarc       // Empty entry in middle
 file1.psarc, file2.psarc,        // Trailing comma
   , file1.psarc                  // Leading comma
+
+file1.psarc
+
+file2.psarc                      // Empty lines
 ```
 
 #### Edge Cases to Handle
@@ -120,18 +135,28 @@ file1.psarc, file2.psarc,        // Trailing comma
 
 ```typescript
 describe('parseCSV', () => {
-  it('should parse basic comma-delimited string', () => {
+  it('should parse newline-delimited string', () => {
+    const result = parseCSV('file1.psarc\nfile2.psarc\nfile3.psarc');
+    expect(result).toEqual(['file1.psarc', 'file2.psarc', 'file3.psarc']);
+  });
+  
+  it('should parse comma-delimited string', () => {
     const result = parseCSV('file1.psarc, file2.psarc, file3.psarc');
     expect(result).toEqual(['file1.psarc', 'file2.psarc', 'file3.psarc']);
   });
   
-  it('should handle no spaces', () => {
+  it('should handle no spaces in comma format', () => {
     const result = parseCSV('file1.psarc,file2.psarc');
     expect(result).toEqual(['file1.psarc', 'file2.psarc']);
   });
   
   it('should filter empty entries', () => {
     const result = parseCSV('file1.psarc, , file2.psarc');
+    expect(result).toEqual(['file1.psarc', 'file2.psarc']);
+  });
+  
+  it('should filter empty lines', () => {
+    const result = parseCSV('file1.psarc\n\nfile2.psarc');
     expect(result).toEqual(['file1.psarc', 'file2.psarc']);
   });
   
@@ -144,10 +169,13 @@ describe('parseCSV', () => {
 
 #### Acceptance Criteria
 
+- Parses newline-delimited strings correctly
 - Parses comma-delimited strings correctly
+- Auto-detects format intelligently
 - Trims whitespace from file names
-- Filters out empty entries
+- Filters out empty entries and blank lines
 - Handles edge cases gracefully
+- Works with FileList.csv (1300+ newline-delimited entries)
 - Returns empty array for invalid input
 - No crashes on malformed input
 - Unit tests achieve 100% coverage
