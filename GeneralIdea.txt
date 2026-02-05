@@ -1,0 +1,20 @@
+I would like to create an application that will allow me to add items - they will be file names imported into Rocksmith. 
+
+Those file names will need to be added to a list, where I can mark them as:
+Good! 
+Bad! These tend to have rolling tablature that is very incorrect
+Wrong Format! - those are ones that are bass only, no guitar tracks
+Untested! - These are ones that I've not yet tested.
+
+I would like to be able to simply type in the names of the files - or import a comma delimited list.
+
+I would like to see icons/visible indicators of the status of the list items.
+
+I'd like to see a green circle for the good entries.
+I'd like to see a red circle for the bad entries.
+I'd like to see a red circle with a line through it for wrong format.
+I'd like a yellow circle for the untested.
+
+I'll manually update the status as I get to it. I'll be testing these items in another application and just update the status here.
+
+I'd like to use mainly javascript or typescript - your choice. It can be both.
