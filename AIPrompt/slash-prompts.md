@@ -118,8 +118,20 @@ Sprint 2 complete! Ready for Sprint 3.
 Detected completed sprints: 1, 2
 Next sprint: 3
 
-Executing Sprint 3: Data Management...
-[Sprint execution output follows]
+Executing Sprint 3: Status Management & Persistence...
+
+📋 Sprint 3 Tasks:
+✅ Task 3.1: Status update functionality
+✅ Task 3.2: localStorage persistence  
+✅ Task 3.3: App initialization
+✅ Task 3.4: Delete functionality
+✅ Task 3.5: Unit tests (100% coverage)
+
+Build verification: ✅ Success
+Test results: 42 passed, 42 total
+Coverage: 100% for dataService.ts and storageService.ts
+
+Sprint 3 complete! Ready for Sprint 4.
 ```
 
 ---
@@ -148,22 +160,30 @@ Executing Sprint 3: Data Management...
 
 **Expected Output:**
 ```
-📊 Sprint 2 Review: Core Functionality
+📊 Sprint 3 Review: Status Management & Persistence
 
 Files Created:
-✅ src/scripts/dataService.ts
-✅ src/scripts/ui.ts
-✅ src/scripts/renderer.ts
-✅ src/scripts/main.ts
+✅ src/scripts/storageService.ts
+✅ tests/dataService.test.ts
+✅ tests/storageService.test.ts
+✅ tests/integration.test.ts
+
+Files Updated:
+✅ src/scripts/dataService.ts (added setFiles, auto-save)
+✅ src/scripts/main.ts (data loading on init)
+✅ src/scripts/renderer.ts (status dropdown, delete button)
 
 Build Status: ✅ Pass
+Test Status: ✅ 42/42 passing
 
 Acceptance Criteria:
-✅ Files can be added individually
-✅ Input validation working
-✅ Toast notifications functional
-✅ File list renders with status indicators
-✅ Empty state displays correctly
+✅ Files can be added, updated, deleted
+✅ Data persists across browser sessions
+✅ Status updates work via dropdown
+✅ Delete requires confirmation
+✅ localStorage handles errors gracefully
+✅ Dates serialize/deserialize correctly
+✅ 100% test coverage for core modules
 
 Status: COMPLETE ✅
 ```
@@ -443,19 +463,77 @@ Clean complete!
 Progress:
 ✅ Sprint 1: Complete
 ✅ Sprint 2: Complete
-🔄 Sprint 3: In Progress (2/4 tasks)
+✅ Sprint 3: Complete
 ⏸️ Sprint 4: Not Started
 ⏸️ Sprint 5: Not Started
 
-Test Coverage: 65% (target: 80%)
+Test Coverage: 100% (Sprint 2-3 modules)
 Build Status: ✅ Passing
-Git Branch: sprints1-2
+Git Branch: slashPrompts
 Uncommitted Changes: 3 files
 
 Next Steps:
-- Complete Sprint 3 Task 3.3
-- Complete Sprint 3 Task 3.4
+- Start Sprint 4
+- Implement CSV bulk import UI
+- Add search/filter functionality
 ```
+
+---
+
+### `/commit-and-push`
+
+**Description:** Commits modified files, creates a new branch, and pushes to remote repository.
+
+**Usage:**
+```
+/commit-and-push
+```
+
+**Interactive Prompts:**
+1. "What files should be committed?" (or "all" for all modified files)
+2. "What is the commit message?"
+3. "What should the branch be named?" (e.g., "sprint3", "feature/bulk-import")
+4. "Push to remote?" (yes/no, default: yes)
+
+**Actions Performed:**
+1. Show git status with modified files
+2. Stage specified files (or all with `git add .`)
+3. Commit with provided message
+4. Create new branch with specified name
+5. Switch to the new branch
+6. Push branch to remote origin
+7. Display confirmation with branch and remote URL
+
+**Expected Output:**
+```
+📋 Git Status:
+Modified files:
+  - src/scripts/dataService.ts
+  - src/scripts/storageService.ts
+  - tests/dataService.test.ts
+  - tests/storageService.test.ts
+  - jest.config.js
+
+✅ Staged 5 files
+✅ Committed: "Sprint 3: Add status management and persistence"
+✅ Created branch: sprint3
+✅ Switched to branch: sprint3
+✅ Pushed to origin/sprint3
+
+Branch URL: https://github.com/user/repo/tree/sprint3
+```
+
+**Common Use Cases:**
+- Completing a sprint and saving work
+- Creating feature branches
+- Backing up work in progress
+- Preparing for pull requests
+
+**Notes:**
+- Ensures clean commits with descriptive messages
+- Follows git branching best practices
+- Allows review before pushing to remote
+- Useful for sprint completion workflow
 
 ---
 
@@ -466,7 +544,8 @@ Next Steps:
 **Description:** Suggests or performs refactoring based on code analysis.
 
 **Parameters:**
-- `file` (optional): Specific file to refactor
+- `fcommit-and-push` | Commit files and push to git | Any |
+| `/ile` (optional): Specific file to refactor
 
 **Usage:**
 ```
@@ -515,7 +594,7 @@ Next Steps:
 | `/perform-sprint` | Execute a specific sprint | Varies |
 | `/next-sprint` | Execute next sprint in sequence | Previous sprint |
 | `/review-sprint` | Review sprint completion | Sprint completed |
-| `/run-tests` | Run test suite with coverage | Sprint 5 |
+| `/run-tests` | Run test suite with coverage | Sprint 3+ |
 | `/check-quality` | Run quality checks | Any |
 | `/start-dev` | Start development server | Sprint 2+ |
 | `/update-prompts` | Update Prompts.md | Any |
@@ -533,7 +612,8 @@ Next Steps:
 1. **Sequential Execution**: Use `/perform-sprint` or `/next-sprint` to execute sprints in order
 2. **Quality Assurance**: Run `/check-quality` before committing code
 3. **Progress Tracking**: Use `/status` to see overall project progress
-4. **Testing**: Use `/run-tests` regularly, especially after implementing features
+4. **Testing**: Use `/run-tests` regularly, especially after implementing feature
+6. **Git Workflow**: Use `/commit-and-push` after completing sprints or major featuress
 5. **Documentation**: Keep prompts updated with `/update-prompts` for reusability
 
 ---
@@ -572,10 +652,16 @@ Example output...
 
 ---
 
-**Created:** February 5, 2026  
-**Last Updated:** February 5, 2026  
-**Version:** 1.0
+**Created:** Fe2
 
 ---
 
 **Note:** These slash prompts are designed for use with AI assistants that support interactive workflows. Actual implementation may vary based on the AI assistant's capabilities.
+
+**Recent Updates:**
+- Added `/commit-and-push` command for git workflow automationsh prompts are designed for use with AI assistants that support interactive workflows. Actual implementation may vary based on the AI assistant's capabilities.
+
+**Recent Updates:**
+- Sprint 3 examples updated to reflect completion
+- Test coverage now shows 100% for Sprint 2-3 modules
+- Status command updated to show Sprint 3 complete
