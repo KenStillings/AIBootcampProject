@@ -70,6 +70,15 @@ AIBootcampProject/
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
 - **Package Manager**: npm
 
+## Security Considerations
+
+This is a demonstration application. For production use, consider:
+- Adding rate limiting to prevent abuse
+- Implementing authentication and authorization
+- Using environment variables for configuration
+- Adding input validation and sanitization
+- Implementing HTTPS
+
 ## License
 
 ISC
