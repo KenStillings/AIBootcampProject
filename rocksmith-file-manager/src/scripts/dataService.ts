@@ -1,5 +1,5 @@
-import { RocksmithFile, FileStatus } from '../types/index';
-import { saveData } from './storageService';
+import type { RocksmithFile, FileStatus } from '../types/index.js';
+import { saveData } from './storageService.js';
 
 // In-memory data store
 let files: RocksmithFile[] = [];

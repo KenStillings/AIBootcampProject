@@ -1,6 +1,6 @@
-import { getFiles, getFileById, updateFileStatus } from './dataService';
-import { showMessage } from './ui';
-import type { RocksmithFile, FileStatus } from '../types/index';
+import { getFiles, getFileById, updateFileStatus } from './dataService.js';
+import { showMessage } from './ui.js';
+import type { RocksmithFile, FileStatus } from '../types/index.js';
 
 /**
  * Renders the complete file list

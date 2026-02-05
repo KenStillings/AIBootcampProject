@@ -1,7 +1,7 @@
-import { initializeFileAddition, initializeBulkImport, initializeFilters } from './ui';
-import { renderFileList, initializeStatusUpdate, initializeDelete } from './renderer';
-import { loadData } from './storageService';
-import { setFiles } from './dataService';
+import { initializeFileAddition, initializeBulkImport, initializeFilters } from './ui.js';
+import { renderFileList, initializeStatusUpdate, initializeDelete } from './renderer.js';
+import { loadData } from './storageService.js';
+import { setFiles } from './dataService.js';
 
 /**
  * Initializes the Rocksmith File Manager application
