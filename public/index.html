@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bootcamp Project</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 AI Bootcamp Full-Stack App</h1>
+            <p class="subtitle">A simple frontend and backend application</p>
+        </header>
+
+        <main>
+            <section class="card">
+                <h2>Server Status</h2>
+                <button id="checkHealth" class="btn btn-primary">Check Server Health</button>
+                <div id="healthResult" class="result"></div>
+            </section>
+
+            <section class="card">
+                <h2>Fetch Data</h2>
+                <button id="fetchData" class="btn btn-secondary">Get Data from API</button>
+                <div id="dataResult" class="result"></div>
+            </section>
+
+            <section class="card">
+                <h2>Send Message</h2>
+                <input type="text" id="messageInput" placeholder="Enter a message..." class="input-field">
+                <button id="sendMessage" class="btn btn-success">Send to Backend</button>
+                <div id="echoResult" class="result"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Built with ❤️ for AI Bootcamp</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
