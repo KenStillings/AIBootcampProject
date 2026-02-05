@@ -160,6 +160,30 @@ function handleDelete(button: HTMLElement): void {
 }
 
 /**
+ * Renders a filtered file list
+ * @param filteredFiles - Array of files to render
+ */
+export function renderFilteredFileList(filteredFiles: RocksmithFile[]): void {
+  const fileListContainer = document.getElementById('file-list') as HTMLDivElement;
+  const emptyState = document.getElementById('empty-state') as HTMLDivElement;
+  
+  if (!fileListContainer || !emptyState) {
+    console.error('File list container or empty state element not found');
+    return;
+  }
+  
+  if (filteredFiles.length === 0) {
+    fileListContainer.innerHTML = '';
+    emptyState.style.display = 'block';
+    emptyState.innerHTML = '<p>No files match your filters.</p>';
+    return;
+  }
+  
+  emptyState.style.display = 'none';
+  fileListContainer.innerHTML = filteredFiles.map(renderFileEntry).join('');
+}
+
+/**
  * Escapes HTML to prevent XSS
  * @param text - Text to escape
  * @returns Escaped HTML string

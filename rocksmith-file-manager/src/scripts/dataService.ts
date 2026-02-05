@@ -104,3 +104,31 @@ export function setFiles(newFiles: RocksmithFile[]): void {
   files = [...newFiles];
 }
 
+/**
+ * Filters files by search term and/or status
+ * @param searchTerm - Text to search in file names (case-insensitive)
+ * @param statusFilter - Status to filter by ('all' or specific status)
+ * @returns Filtered array of files
+ */
+export function filterFiles(
+  searchTerm: string = '',
+  statusFilter: FileStatus | 'all' = 'all'
+): RocksmithFile[] {
+  let filtered = [...files];
+  
+  // Apply search filter
+  if (searchTerm.trim()) {
+    const term = searchTerm.toLowerCase();
+    filtered = filtered.filter(file => 
+      file.fileName.toLowerCase().includes(term)
+    );
+  }
+  
+  // Apply status filter
+  if (statusFilter !== 'all') {
+    filtered = filtered.filter(file => file.status === statusFilter);
+  }
+  
+  return filtered;
+}
+
