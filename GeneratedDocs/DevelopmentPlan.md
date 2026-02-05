@@ -9,6 +9,56 @@
 
 ---
 
+## Testing Requirements
+
+### Code Coverage Standards
+- **Minimum Test Coverage**: 80% across all modules
+- **Coverage Types Required**:
+  - Statement Coverage: ≥80%
+  - Branch Coverage: ≥80%
+  - Function Coverage: ≥80%
+  - Line Coverage: ≥80%
+
+### Testing Frameworks
+- **Unit Testing**: Jest or Vitest
+- **Code Coverage Tool**: Istanbul/nyc or built-in coverage tools
+- **Test Runner**: npm test script
+
+### Coverage Reporting
+- Generate HTML coverage reports after each test run
+- Include coverage badges in README.md
+- Fail builds if coverage drops below 80%
+- Exclude configuration files and type definitions from coverage calculations
+
+### Critical Modules Requiring Testing
+1. **Data Service** (`dataService.ts`) - 100% coverage required
+   - File addition, retrieval, update, deletion
+   - Duplicate handling
+   - Data validation
+
+2. **Storage Service** (`storageService.ts`) - 100% coverage required
+   - Save/load operations
+   - Data serialization/deserialization
+   - Error handling for storage limits
+
+3. **CSV Parser** (`csvParser.ts`) - 100% coverage required
+   - Various CSV formats
+   - Edge cases (empty strings, special characters)
+   - Trimming and validation
+
+4. **UI Functions** (`ui.ts`) - ≥70% coverage minimum
+   - Event handlers
+   - Validation logic
+   - DOM manipulation (where testable)
+
+### Test Types Required
+- **Unit Tests**: Test individual functions in isolation
+- **Integration Tests**: Test component interactions
+- **Edge Case Tests**: Test boundary conditions and error scenarios
+- **Regression Tests**: Prevent previously fixed bugs from reoccurring
+
+---
+
 ## Sprint Overview
 
 ### Sprint 1: Project Setup & Foundation (Week 1)
@@ -46,14 +96,21 @@
     /types
   /dist
   /tests
+  /coverage (for test coverage reports)
   index.html
   package.json
   tsconfig.json
+  jest.config.js (or vitest.config.ts)
+  .gitignore (include /coverage and /dist)
   ```
 - [ ] Initialize npm project (`npm init`)
 - [ ] Install development dependencies (TypeScript, testing tools)
+- [ ] Install Jest/Vitest with TypeScript support
+- [ ] Install coverage reporting tools
 - [ ] Configure TypeScript (`tsconfig.json`)
+- [ ] Configure test framework with 80% coverage threshold
 - [ ] Set up build scripts in `package.json`
+- [ ] Add npm scripts: `test`, `test:coverage`, `test:watch`
 
 **Deliverables**: Working project structure with build configuration
 
@@ -374,26 +431,63 @@ export interface RocksmithFile {
 ## Sprint 5: Testing & Deployment (Days 21-30)
 
 ### Task 5.1: Unit Testing
-**Estimated Time**: 6 hours  
+**Estimated Time**: 8 hours  
 **Priority**: High  
 **Dependencies**: All core features complete
 
 **Subtasks**:
-- [ ] Set up testing framework (Jest or similar)
-- [ ] Write tests for data service functions
-- [ ] Write tests for CSV parser
-- [ ] Write tests for storage service
-- [ ] Achieve >80% code coverage
-- [ ] Fix any bugs discovered
+- [ ] Set up testing framework (Jest or Vitest)
+- [ ] Configure coverage thresholds in jest.config.js/vitest.config.ts:
+  ```javascript
+  coverageThreshold: {
+    global: {
+      statements: 80,
+      branches: 80,
+      functions: 80,
+      lines: 80
+    }
+  }
+  ```
+- [ ] Write tests for data service functions (target: 100% coverage)
+- [ ] Write tests for CSV parser (target: 100% coverage)
+- [ ] Write tests for storage service (target: 100% coverage)
+- [ ] Write tests for UI validation logic (target: 70% coverage)
+- [ ] Generate coverage report: `npm run test:coverage`
+- [ ] Review coverage report and identify gaps
+- [ ] Write additional tests to reach 80% minimum threshold
+- [ ] Fix any bugs discovered during testing
+- [ ] Document any code excluded from coverage and justify exclusion
 
 **Test Cases**:
-- Adding files (valid, duplicate, empty)
-- Updating status
-- Deleting files
-- CSV parsing (various formats)
-- LocalStorage persistence
+- **Data Service**:
+  - Adding files (valid, duplicate, empty, whitespace)
+  - Updating status (all valid states, invalid states)
+  - Deleting files (existing, non-existent)
+  - Retrieving files (all, by ID, filtered)
+  - ID generation uniqueness
+  
+- **CSV Parser**:
+  - Single file
+  - Multiple files with various delimiters
+  - Files with extra whitespace
+  - Empty input
+  - Malformed input
+  
+- **Storage Service**:
+  - Save operation success
+  - Load operation success
+  - Date serialization/deserialization
+  - Empty storage handling
+  - Corrupted data handling
+  - Storage quota exceeded scenarios
 
-**Deliverables**: Comprehensive unit test suite
+**Coverage Validation**:
+- [ ] Run `npm run test:coverage` to generate report
+- [ ] Verify all modules meet 80% minimum threshold
+- [ ] Generate HTML coverage report in `/coverage` directory
+- [ ] Review uncovered lines and add tests or justify exclusion
+
+**Deliverables**: Comprehensive unit test suite with ≥80% code coverage
 
 ---
 
@@ -497,6 +591,9 @@ export interface RocksmithFile {
 - [ ] No console errors in browser
 - [ ] Code follows consistent style guide
 - [ ] All functions have JSDoc comments
+- [ ] Test coverage meets 80% minimum threshold
+- [ ] Coverage report generated and reviewed
+- [ ] All critical modules have >80% coverage
 
 ### Functionality
 - [ ] All core features work as specified
@@ -524,7 +621,9 @@ export interface RocksmithFile {
 
 ### Technical Metrics
 - ✓ 0 compilation errors
-- ✓ >80% test coverage
+- ✓ ≥80% test coverage (statements, branches, functions, lines)
+- ✓ 100% coverage on critical modules (dataService, storageService, csvParser)
+- ✓ All tests passing
 - ✓ <2 second load time
 - ✓ Supports 1000+ files
 
@@ -604,6 +703,15 @@ npm run build
 
 # Run tests
 npm test
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+
+# View coverage report (after running test:coverage)
+open coverage/index.html
 
 # Run linter
 npm run lint
