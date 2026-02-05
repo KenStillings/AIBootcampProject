@@ -51,7 +51,7 @@ function handleAddFile(): void {
  * @param message - Message to display
  * @param type - 'success' | 'error' | 'info'
  */
-function showMessage(message: string, type: 'success' | 'error' | 'info'): void {
+export function showMessage(message: string, type: 'success' | 'error' | 'info'): void {
   const toastContainer = document.getElementById('toast-container');
   
   if (!toastContainer) {

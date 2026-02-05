@@ -298,6 +298,54 @@ Use [technology] instead of [default technology].
 - Adjust prompts based on your specific project needs
 - Don't hesitate to iterate on any document
 
+### Prompt 8: Execute Sprint 3
+
+```
+/next-sprint
+```
+
+Or:
+
+```
+Please execute Sprint 3 following the tasks in GeneratedDocs/Sprint3-TaskPlan.md. Follow the coding guidelines in Docs/coding-guidelines.md, testing guidelines in Docs/testing-guidelines.md, and UI guidelines in Docs/ui-guidelines.md.
+
+Implement:
+- Task 3.1: Status update functionality with dropdowns
+- Task 3.2: localStorage persistence service
+- Task 3.3: App initialization with data loading
+- Task 3.4: Delete functionality with confirmation
+- Task 3.5: Unit tests with 80%+ coverage for Sprint 2-3 code
+
+After implementation, verify:
+- All tests pass
+- TypeScript builds without errors
+- Coverage meets 80% threshold for tested modules
+```
+
+**Expected Output:**
+- Updated `src/scripts/dataService.ts` with `setFiles()` function
+- New file `src/scripts/storageService.ts` with save/load/clear functions
+- Updated `src/scripts/main.ts` with data loading on initialization
+- Updated `src/scripts/renderer.ts` with status dropdown, delete button, event handlers
+- New test file `tests/dataService.test.ts` with 100% coverage
+- New test file `tests/storageService.test.ts` with 100% coverage
+- New test file `tests/integration.test.ts` with workflow tests
+- Build successful
+- All tests passing (40+ tests)
+- Coverage: 100% for dataService.ts and storageService.ts
+
+**Sprint 3 Achievements:**
+- ✅ Complete CRUD operations (Create, Read, Update, Delete)
+- ✅ Data persistence across browser sessions
+- ✅ Status management with UI controls
+- ✅ Confirmation dialogs for destructive actions
+- ✅ Comprehensive test suite with 100% coverage for core modules
+- ✅ localStorage error handling (quota exceeded, corrupted data)
+- ✅ Date serialization/deserialization
+- ✅ Auto-save on all data mutations
+
+---
+
 ### After Generation
 - Use the Sprint plans as actual working documents
 - Check off tasks as you complete them
@@ -347,11 +395,12 @@ Create detailed user stories based on the features in CreatedIdeation.md
 
 ## Version History
 
-- **v1.3** (2026-02-05): Updated testing approach
-  - Unit tests now distributed across Sprints 3-4
-  - Tests written alongside features for better quality
-  - Sprint 5 focuses on integration testing and coverage validation
-  - Updated prompt examples to reflect test-driven development
+- **v1.4** (2026-02-05): Added Prompt 8 for Sprint 3 execution
+  - Sprint 3: Status management, persistence, delete functionality
+  - Comprehensive unit tests achieving 100% coverage for core modules
+  - localStorage integration with error handling
+  - CRUD operations complete
+  - 42 tests passing
 
 - **v1.3** (2026-02-05): Updated testing approach
   - Unit tests now distributed across Sprints 3-4

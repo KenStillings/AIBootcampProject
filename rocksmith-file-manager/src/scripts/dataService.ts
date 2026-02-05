@@ -1,4 +1,5 @@
 import { RocksmithFile, FileStatus } from '../types/index';
+import { saveData } from './storageService';
 
 // In-memory data store
 let files: RocksmithFile[] = [];
@@ -32,6 +33,7 @@ export function addFile(fileName: string): RocksmithFile | null {
   };
 
   files.push(newFile);
+  saveData(files);  // Auto-save
   return newFile;
 }
 
@@ -65,6 +67,7 @@ export function updateFileStatus(id: string, status: FileStatus): boolean {
   }
 
   file.status = status;
+  saveData(files);  // Auto-save
   file.lastModified = new Date();
   return true;
 }
@@ -81,6 +84,7 @@ export function deleteFile(id: string): boolean {
   }
 
   files.splice(index, 1);
+  saveData(files);  // Auto-save
   return true;
 }
 
@@ -89,4 +93,14 @@ export function deleteFile(id: string): boolean {
  */
 export function clearAllFiles(): void {
   files = [];
+  saveData(files);  // Auto-save
 }
+
+/**
+ * Sets the files array (used for initialization from storage)
+ * @param newFiles - Array of files to set
+ */
+export function setFiles(newFiles: RocksmithFile[]): void {
+  files = [...newFiles];
+}
+

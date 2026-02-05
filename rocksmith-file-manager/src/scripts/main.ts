@@ -1,5 +1,7 @@
 import { initializeFileAddition } from './ui';
-import { renderFileList } from './renderer';
+import { renderFileList, initializeStatusUpdate, initializeDelete } from './renderer';
+import { loadData } from './storageService';
+import { setFiles } from './dataService';
 
 /**
  * Initializes the Rocksmith File Manager application
@@ -7,10 +9,19 @@ import { renderFileList } from './renderer';
 function initializeApp(): void {
   console.log('Initializing Rocksmith File Manager...');
   
-  // Initialize file addition UI
-  initializeFileAddition();
+  // Load saved data from localStorage
+  const savedFiles = loadData();
+  if (savedFiles.length > 0) {
+    setFiles(savedFiles);
+    console.log(`Loaded ${savedFiles.length} files from storage`);
+  }
   
-  // Render initial empty state
+  // Initialize UI components
+  initializeFileAddition();
+  initializeStatusUpdate();
+  initializeDelete();
+  
+  // Render initial state
   renderFileList();
   
   console.log('Rocksmith File Manager initialized successfully');

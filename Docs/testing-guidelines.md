@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the testing strategy and best practices for the todo app. We follow a comprehensive testing approach that ensures code quality, maintainability, and reliability across the entire application.
+This document outlines the testing strategy and best practices for the Rocksmith File Manager. We follow a comprehensive testing approach that ensures code quality, maintainability, and reliability across the entire application.
 
 ## Testing Principles
 
@@ -10,14 +10,20 @@ This document outlines the testing strategy and best practices for the todo app.
 - Write tests as part of the development process
 - Tests should describe expected behavior before implementation
 - Use tests to validate and document functionality
+- Sprint 3-4: Unit tests alongside feature development
+- Sprint 5: Integration testing and coverage validation
 
 ### 2. Comprehensive Coverage
 - **Target Coverage**: 80%+ code coverage across all packages
 - **Coverage Areas**:
   - Unit tests for individual components and functions
-  - Integration tests for component interactions and API communication
-  - End-to-end tests for critical user workflows
+  - Integration tests for component interactions and data flow
+  - Focus coverage on business logic and data operations first
 - **Coverage Tools**: Use Jest's coverage reports to track progress
+- **Coverage Strategy**: 
+  - Sprint 3: 100% coverage for core modules (dataService, storageService)
+  - Sprint 4: Add UI/renderer tests
+  - Sprint 5: Validate overall coverage meets 80% threshold
 
 ### 3. Test Quality Over Quantity
 - Focus on testing behavior, not implementation details
@@ -95,39 +101,53 @@ End-to-end testing can be added in future iterations if needed. Currently, focus
 ## Test Organization
 
 ### Directory Structure
-- Tests are stored in `__tests__/` directories colocated with source files
-- This keeps related code and tests together for easier navigation
+- Tests are stored in a `tests/` directory at the project root
+- This centralizes all tests for easy discovery and execution
 
 **Example**:
 ```
-src/
-  components/
-    TodoCard.js
-    __tests__/
-      TodoCard.test.js
-  utils/
-    formatDate.js
-    __tests__/
-      formatDate.test.js
-```
-
-### Test File Naming
-- Test files should be named `{filename}.test.js`
+rocksmith-file-manager/
+  src/
+    scripts/
+      dataService.ts
+      storageService.ts
+      ui.ts
+      renderer.ts
+  tests/
+    dataService.test.ts
+    storageService.test.ts
+    ui.test.ts
+    renderer.test.ts
+    integration.test.tsts` (TypeScript projects)
 - Use descriptive names that indicate what is being tested
+- Integration tests should be named `integration.test.ts`
 
 ### Test Structure
 Each test file should follow this structure:
 
-```javascript
+```typescript
 // 1. Imports
-import { render, screen } from '@testing-library/react';
-import MyComponent from '../MyComponent';
+import { addFile, getFiles } from '../src/scripts/dataService';
+import type { RocksmithFile } from '../src/types/index';
 
-// 2. Setup (if needed)
-// Define constants, fixtures, or mock data
+// 2. Setup (if needed with mocks)
+jest.mock('../src/scripts/storageService', () => ({
+  saveData: jest.fn(() => true),
+  loadData: jest.fn(() => [])
+}));
 
 // 3. Describe block
-describe('MyComponent', () => {
+describe('dataService', () => {
+  // 4. Before/After hooks
+  beforeEach(() => {
+    // Reset state
+  });
+  
+  // 5. Individual tests
+  test('should add a new file with default status', () => {
+    const file = addFile('test.psarc');
+    expect(file).not.toBeNull();
+    expect(file?.status).toBe('untested'
   // 4. Individual tests
   test('should render correctly', () => {
     render(<MyComponent />);
