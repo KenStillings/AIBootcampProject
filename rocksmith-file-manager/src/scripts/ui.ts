@@ -1,6 +1,7 @@
 import { addFile, getFiles, filterFiles } from './dataService.js';
 import { renderFileList, renderFilteredFileList } from './renderer.js';
 import { parseCSV } from './csvParser.js';
+import { paginationService } from './paginationService.js';
 
 /**
  * Initializes the file addition UI
@@ -200,6 +201,9 @@ function applyFilters(): void {
   
   const searchTerm = searchInput?.value || '';
   const statusFilter = activeFilter?.dataset.status || 'all';
+  
+  // Reset pagination to first page when filters change
+  paginationService.reset();
   
   const filtered = filterFiles(searchTerm, statusFilter as any);
   const total = getFiles().length;
