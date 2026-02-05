@@ -1,8 +1,8 @@
 # Sprint 3: Status Management & Persistence
 
 **Sprint Duration**: Days 11-15 (Week 3)  
-**Sprint Goal**: Add status updates and data persistence  
-**Total Estimated Time**: 11 hours
+**Sprint Goal**: Add status updates, data persistence, and unit tests  
+**Total Estimated Time**: 14 hours
 
 ---
 
@@ -530,6 +530,229 @@ function handleDelete(button: HTMLElement): void {
 
 ---
 
+### ✅ Task 3.5: Unit Tests for Sprint 3 Features
+
+**Estimated Time**: 3 hours  
+**Priority**: High  
+**Dependencies**: Tasks 3.1-3.4  
+**Status**: [ ] Not Started
+
+#### Subtasks Checklist
+
+- [ ] Create `tests/dataService.test.ts`
+- [ ] Test `updateFileStatus()` function
+- [ ] Test `deleteFile()` function
+- [ ] Test `setFiles()` function
+- [ ] Create `tests/storageService.test.ts`
+- [ ] Test `saveData()` function with mock localStorage
+- [ ] Test `loadData()` function with valid data
+- [ ] Test `loadData()` with corrupted data
+- [ ] Test Date serialization/deserialization
+- [ ] Test storage quota error handling
+- [ ] Create `tests/integration.test.ts`
+- [ ] Test full data flow (add → update → save → load)
+- [ ] Run tests and verify coverage
+- [ ] Aim for 80%+ coverage on Sprint 3 code
+
+#### Data Service Tests
+
+**tests/dataService.test.ts**:
+```typescript
+import { updateFileStatus, deleteFile, setFiles, getFiles, addFile } from '../src/scripts/dataService';
+import type { FileStatus } from '../src/types/index';
+
+describe('dataService', () => {
+  beforeEach(() => {
+    // Clear data before each test
+    setFiles([]);
+  });
+
+  describe('updateFileStatus', () => {
+    it('should update file status', () => {
+      const file = addFile('test.psarc');
+      const result = updateFileStatus(file!.id, 'good');
+      
+      expect(result).toBe(true);
+      const files = getFiles();
+      expect(files[0].status).toBe('good');
+    });
+
+    it('should update lastModified timestamp', () => {
+      const file = addFile('test.psarc');
+      const originalTime = file!.lastModified;
+      
+      // Wait a bit
+      setTimeout(() => {
+        updateFileStatus(file!.id, 'bad');
+        const files = getFiles();
+        expect(files[0].lastModified.getTime()).toBeGreaterThan(originalTime.getTime());
+      }, 10);
+    });
+
+    it('should return false for non-existent file', () => {
+      const result = updateFileStatus('non-existent-id', 'good');
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('deleteFile', () => {
+    it('should delete file by id', () => {
+      const file = addFile('test.psarc');
+      const result = deleteFile(file!.id);
+      
+      expect(result).toBe(true);
+      expect(getFiles()).toHaveLength(0);
+    });
+
+    it('should return false for non-existent file', () => {
+      const result = deleteFile('non-existent-id');
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('setFiles', () => {
+    it('should replace files array', () => {
+      addFile('file1.psarc');
+      addFile('file2.psarc');
+      
+      const newFiles = [{
+        id: '123',
+        fileName: 'new.psarc',
+        status: 'good' as FileStatus,
+        dateAdded: new Date(),
+        lastModified: new Date()
+      }];
+      
+      setFiles(newFiles);
+      expect(getFiles()).toHaveLength(1);
+      expect(getFiles()[0].fileName).toBe('new.psarc');
+    });
+  });
+});
+```
+
+#### Storage Service Tests
+
+**tests/storageService.test.ts**:
+```typescript
+import { saveData, loadData, clearData } from '../src/scripts/storageService';
+import type { RocksmithFile } from '../src/types/index';
+
+// Mock localStorage
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => { store[key] = value; },
+    removeItem: (key: string) => { delete store[key]; },
+    clear: () => { store = {}; }
+  };
+})();
+
+global.localStorage = localStorageMock as Storage;
+
+describe('storageService', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  describe('saveData', () => {
+    it('should save files to localStorage', () => {
+      const files: RocksmithFile[] = [{
+        id: '123',
+        fileName: 'test.psarc',
+        status: 'untested',
+        dateAdded: new Date('2026-01-01'),
+        lastModified: new Date('2026-01-01')
+      }];
+
+      const result = saveData(files);
+      expect(result).toBe(true);
+      expect(localStorage.getItem('rocksmith-file-manager-data')).toBeTruthy();
+    });
+
+    it('should serialize Dates to ISO strings', () => {
+      const files: RocksmithFile[] = [{
+        id: '123',
+        fileName: 'test.psarc',
+        status: 'untested',
+        dateAdded: new Date('2026-01-01T00:00:00.000Z'),
+        lastModified: new Date('2026-01-01T00:00:00.000Z')
+      }];
+
+      saveData(files);
+      const saved = localStorage.getItem('rocksmith-file-manager-data');
+      expect(saved).toContain('2026-01-01T00:00:00.000Z');
+    });
+  });
+
+  describe('loadData', () => {
+    it('should load files from localStorage', () => {
+      const files: RocksmithFile[] = [{
+        id: '123',
+        fileName: 'test.psarc',
+        status: 'good',
+        dateAdded: new Date('2026-01-01'),
+        lastModified: new Date('2026-01-01')
+      }];
+
+      saveData(files);
+      const loaded = loadData();
+      
+      expect(loaded).toHaveLength(1);
+      expect(loaded[0].fileName).toBe('test.psarc');
+      expect(loaded[0].status).toBe('good');
+    });
+
+    it('should deserialize ISO strings to Dates', () => {
+      const files: RocksmithFile[] = [{
+        id: '123',
+        fileName: 'test.psarc',
+        status: 'untested',
+        dateAdded: new Date('2026-01-01'),
+        lastModified: new Date('2026-01-01')
+      }];
+
+      saveData(files);
+      const loaded = loadData();
+      
+      expect(loaded[0].dateAdded).toBeInstanceOf(Date);
+      expect(loaded[0].lastModified).toBeInstanceOf(Date);
+    });
+
+    it('should return empty array for no data', () => {
+      const loaded = loadData();
+      expect(loaded).toEqual([]);
+    });
+
+    it('should handle corrupted data gracefully', () => {
+      localStorage.setItem('rocksmith-file-manager-data', 'invalid json');
+      const loaded = loadData();
+      expect(loaded).toEqual([]);
+    });
+  });
+});
+```
+
+#### Acceptance Criteria
+
+- All Sprint 3 functions have unit tests
+- Tests cover happy paths and error cases
+- localStorage is properly mocked
+- Date serialization is tested
+- Test coverage is 80%+ for Sprint 3 code
+- All tests pass
+- Tests run in < 5 seconds
+
+#### Deliverables
+
+- ✓ Complete test suite for Sprint 3 features
+- ✓ 80%+ test coverage
+- ✓ All tests passing
+
+---
+
 ## Sprint 3 Integration Tasks
 
 ### Integration Task: Complete App Initialization
@@ -565,6 +788,7 @@ function init(): void {
 - [ ] Task 3.2: Local storage persistence ✓
 - [ ] Task 3.3: Application initialization ✓
 - [ ] Task 3.4: Delete functionality ✓
+- [ ] Task 3.5: Unit tests for Sprint 3 ✓
 
 ### Quality Checks
 - [ ] All CRUD operations work (Create, Read, Update, Delete)
