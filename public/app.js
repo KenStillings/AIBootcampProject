@@ -22,6 +22,9 @@ checkHealthBtn.addEventListener('click', async () => {
     try {
         healthResult.innerHTML = '<p>Loading...</p>';
         const response = await fetch(`${API_BASE_URL}/api/health`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         displayResult(healthResult, data);
     } catch (error) {
@@ -34,6 +37,9 @@ fetchDataBtn.addEventListener('click', async () => {
     try {
         dataResult.innerHTML = '<p>Loading...</p>';
         const response = await fetch(`${API_BASE_URL}/api/data`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         displayResult(dataResult, data);
     } catch (error) {
@@ -59,6 +65,9 @@ sendMessageBtn.addEventListener('click', async () => {
             },
             body: JSON.stringify({ message })
         });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         displayResult(echoResult, data);
         messageInput.value = '';
