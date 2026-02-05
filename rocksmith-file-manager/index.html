@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rocksmith File Manager - Track and manage custom song files">
+  <title>Rocksmith File Manager</title>
+  <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+  <header>
+    <h1>🎸 Rocksmith File Manager</h1>
+  </header>
+  
+  <main>
+    <!-- Input Section -->
+    <section class="input-section">
+      <div class="single-file-input">
+        <label for="file-name-input">Add Single File:</label>
+        <input 
+          type="text" 
+          id="file-name-input" 
+          placeholder="Enter file name (e.g., song-artist.psarc)..."
+          autocomplete="off"
+        >
+        <button id="add-file-btn" class="btn-primary">Add File</button>
+      </div>
+      
+      <div class="bulk-import">
+        <label for="csv-input">Bulk Import (comma-delimited):</label>
+        <textarea 
+          id="csv-input" 
+          placeholder="file1.psarc, file2.psarc, file3.psarc..."
+          rows="3"
+        ></textarea>
+        <button id="import-btn" class="btn-primary">Import Files</button>
+      </div>
+    </section>
+    
+    <!-- Filter Section -->
+    <section class="filter-section">
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Search files..."
+        autocomplete="off"
+      >
+      <div class="status-filters">
+        <button class="filter-btn active" data-status="all">All</button>
+        <button class="filter-btn" data-status="good">Good</button>
+        <button class="filter-btn" data-status="bad">Bad</button>
+        <button class="filter-btn" data-status="wrongFormat">Wrong Format</button>
+        <button class="filter-btn" data-status="untested">Untested</button>
+      </div>
+      <div class="filter-info">
+        <span id="filter-count"></span>
+      </div>
+    </section>
+    
+    <!-- File List Display -->
+    <section class="file-list-section">
+      <div id="file-list" class="file-list">
+        <!-- Files will be dynamically rendered here -->
+      </div>
+      <div id="empty-state" class="empty-state">
+        <p>No files added yet. Start by adding a file above.</p>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Messages/Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+  
+  <script src="dist/scripts/main.js" type="module"></script>
+</body>
+</html>

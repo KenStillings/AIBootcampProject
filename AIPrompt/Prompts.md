@@ -159,6 +159,58 @@ Moving forward, please use the guidelines in the Docs directory as your developm
 
 ---
 
+### Prompt 7: Implement Sprint Tasks
+
+```
+Using the guidelines provided, please implement the tasks in Sprint[N]-TaskPlan.md
+```
+
+**Purpose:** Executes the actual implementation of a specific sprint's tasks following established coding, testing, and UI guidelines.
+
+**Expected Output:**
+- All source code files created as specified in the sprint plan
+- TypeScript/JavaScript modules with proper structure and documentation
+- CSS styling following design guidelines
+- Build configuration successful
+- Development server setup (if applicable)
+- Initial verification that code compiles and runs
+
+**Sprint-Specific Examples:**
+
+**Sprint 1 - Project Setup:**
+```
+Using the guidelines provided, please implement the tasks in Sprint1-TaskPlan.md
+```
+- Creates project structure, package.json, tsconfig.json, jest.config.js
+- Sets up TypeScript types and interfaces
+- Creates HTML structure and CSS framework
+
+**Sprint 2 - Core Functionality:**
+```
+Using the guidelines provided, please implement the tasks in Sprint2-TaskPlan.md
+```
+- Implements data service module (CRUD operations)
+- Creates UI event handlers and validation
+- Builds rendering logic for dynamic content
+- Sets up development server for testing
+
+**When to Use:**
+- After completing all planning documentation
+- After setting development guidelines (Prompt 6)
+- When ready to begin actual code implementation
+- At the start of each new sprint
+
+**Best Practices:**
+- Complete sprints sequentially (Sprint 1 → Sprint 2 → Sprint 3, etc.)
+- Verify build and functionality before moving to next sprint
+- Review generated code against guidelines
+- Test features manually or via unit tests
+- Commit code to version control after each sprint
+
+**Note:** Replace [N] with the sprint number (1, 2, 3, 4, or 5). Always complete prerequisites from previous sprints before starting a new sprint.
+
+---
+
 ## Customization Options
 
 You can customize these prompts by:
@@ -198,6 +250,7 @@ Use [technology] instead of [default technology].
 5. **Create Sprint Plans:** Use Prompt 4 → Creates 5 sprint task plan files
 6. **Organize:** Use Prompt 5 → Moves all files to `GeneratedDocs/` folder
 7. **Set Guidelines:** Use Prompt 6 → Instructs AI to follow project-specific guidelines for all future development
+8. **Implement Sprints:** Use Prompt 7 → Execute each sprint's tasks sequentially (Sprint 1 → Sprint 2 → Sprint 3 → Sprint 4 → Sprint 5)
 
 ---
 
@@ -264,6 +317,12 @@ Create detailed user stories based on the features in CreatedIdeation.md
 ---
 
 ## Version History
+
+- **v1.2** (2026-02-05): Added Prompt 7 for sprint implementation
+  - New prompt to execute actual coding tasks from sprint plans
+  - Sprint-specific examples for different implementation phases
+  - Best practices for sequential sprint execution
+  - Updated usage flow to include implementation step
 
 - **v1.1** (2026-02-05): Added Prompt 6 for setting development guidelines
   - New prompt to reference project-specific coding, testing, and UI guidelines
