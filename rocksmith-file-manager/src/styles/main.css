@@ -177,9 +177,23 @@ textarea {
 }
 
 .file-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-md);
+}
+
+/* Two columns on tablet */
+@media (max-width: 1024px) {
+  .file-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Single column on mobile */
+@media (max-width: 768px) {
+  .file-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 .file-entry {
@@ -349,6 +363,61 @@ textarea {
 
 .toast-info {
   background-color: var(--color-primary);
+}
+
+/* Pagination Section */
+.pagination-section {
+  margin-top: var(--spacing-xl);
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: var(--spacing-md);
+}
+
+.pagination-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  background-color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  min-width: 2.5rem;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-btn.active {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  font-weight: bold;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f5f5f5;
+}
+
+.pagination-info {
+  margin-left: var(--spacing-md);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
 }
 
 /* Responsive Design */

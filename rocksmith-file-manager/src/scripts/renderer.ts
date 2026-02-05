@@ -1,5 +1,6 @@
 import { getFiles, getFileById, updateFileStatus } from './dataService.js';
 import { showMessage } from './ui.js';
+import { paginationService } from './paginationService.js';
 import type { RocksmithFile, FileStatus } from '../types/index.js';
 
 /**
@@ -19,11 +20,21 @@ export function renderFileList(): void {
   if (files.length === 0) {
     fileListContainer.innerHTML = '';
     emptyState.style.display = 'block';
+    renderPaginationControls(0);
     return;
   }
   
+  // Initialize pagination with total file count
+  paginationService.initialize(files.length);
+  
+  // Get current page slice
+  const pageFiles = paginationService.getCurrentPageSlice(files);
+  
   emptyState.style.display = 'none';
-  fileListContainer.innerHTML = files.map(renderFileEntry).join('');
+  fileListContainer.innerHTML = pageFiles.map(renderFileEntry).join('');
+  
+  // Render pagination controls
+  renderPaginationControls(files.length);
 }
 
 /**
@@ -176,11 +187,148 @@ export function renderFilteredFileList(filteredFiles: RocksmithFile[]): void {
     fileListContainer.innerHTML = '';
     emptyState.style.display = 'block';
     emptyState.innerHTML = '<p>No files match your filters.</p>';
+    renderPaginationControls(0);
     return;
   }
   
+  // Initialize pagination with filtered file count
+  paginationService.initialize(filteredFiles.length);
+  
+  // Get current page slice
+  const pageFiles = paginationService.getCurrentPageSlice(filteredFiles);
+  
   emptyState.style.display = 'none';
-  fileListContainer.innerHTML = filteredFiles.map(renderFileEntry).join('');
+  fileListContainer.innerHTML = pageFiles.map(renderFileEntry).join('');
+  
+  // Render pagination controls
+  renderPaginationControls(filteredFiles.length);
+}
+
+/**
+ * Renders pagination controls
+ */
+export function renderPaginationControls(totalItems: number): void {
+  const paginationContainer = document.getElementById('pagination-controls');
+  
+  if (!paginationContainer) {
+    console.error('Pagination controls container not found');
+    return;
+  }
+
+  if (totalItems === 0) {
+    paginationContainer.style.display = 'none';
+    return;
+  }
+
+  const state = paginationService.getState();
+  
+  if (state.totalPages <= 1) {
+    paginationContainer.style.display = 'none';
+    return;
+  }
+
+  paginationContainer.style.display = 'flex';
+  
+  const pageRange = paginationService.getPageRange();
+  
+  let html = `
+    <button 
+      class="pagination-btn" 
+      data-action="first" 
+      ${!paginationService.hasPreviousPage() ? 'disabled' : ''}
+    >
+      ⟨⟨
+    </button>
+    <button 
+      class="pagination-btn" 
+      data-action="previous" 
+      ${!paginationService.hasPreviousPage() ? 'disabled' : ''}
+    >
+      ⟨ Previous
+    </button>
+  `;
+  
+  pageRange.forEach(page => {
+    const isActive = page === state.currentPage;
+    html += `
+      <button 
+        class="pagination-btn ${isActive ? 'active' : ''}" 
+        data-action="page" 
+        data-page="${page}"
+      >
+        ${page}
+      </button>
+    `;
+  });
+  
+  html += `
+    <button 
+      class="pagination-btn" 
+      data-action="next" 
+      ${!paginationService.hasNextPage() ? 'disabled' : ''}
+    >
+      Next ⟩
+    </button>
+    <button 
+      class="pagination-btn" 
+      data-action="last" 
+      ${!paginationService.hasNextPage() ? 'disabled' : ''}
+    >
+      ⟩⟩
+    </button>
+  `;
+  
+  html += `
+    <span class="pagination-info">
+      Page ${state.currentPage} of ${state.totalPages} (${totalItems} total)
+    </span>
+  `;
+  
+  paginationContainer.innerHTML = html;
+}
+
+/**
+ * Initialize pagination controls event handlers
+ */
+export function initializePagination(): void {
+  const paginationContainer = document.getElementById('pagination-controls');
+  
+  if (!paginationContainer) {
+    console.error('Pagination controls container not found');
+    return;
+  }
+
+  paginationContainer.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    
+    if (!target.classList.contains('pagination-btn')) {
+      return;
+    }
+
+    const action = target.dataset.action;
+    
+    switch (action) {
+      case 'first':
+        paginationService.firstPage();
+        break;
+      case 'previous':
+        paginationService.previousPage();
+        break;
+      case 'next':
+        paginationService.nextPage();
+        break;
+      case 'last':
+        paginationService.lastPage();
+        break;
+      case 'page':
+        const page = parseInt(target.dataset.page || '1', 10);
+        paginationService.setPage(page);
+        break;
+    }
+    
+    // Re-render file list with new page
+    renderFileList();
+  });
 }
 
 /**

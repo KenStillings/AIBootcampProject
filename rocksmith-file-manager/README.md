@@ -13,9 +13,13 @@ A web-based application to manage and track the status of your Rocksmith custom 
 - **⌨️ Keyboard Shortcuts**: 
   - `Ctrl/Cmd + Enter` to import files
   - `/` to focus search
+- **� Smart Pagination**: Display files in pages of 21 items (3 columns × 7 items per column)
+  - Navigate with First, Previous, Next, Last buttons
+  - Current page indicator
+  - Responsive layout: 3 columns (desktop), 2 columns (tablet), 1 column (mobile)
 - **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - **⚡ High Performance**: Search through 500+ files in under 100ms
-- **🧪 Thoroughly Tested**: 98.97% test coverage with 76 passing tests
+- **🧪 Thoroughly Tested**: 99.23% test coverage with 122 passing tests
 
 ## 📸 Screenshots
 

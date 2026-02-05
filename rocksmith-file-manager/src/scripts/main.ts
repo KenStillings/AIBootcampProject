@@ -1,5 +1,5 @@
 import { initializeFileAddition, initializeBulkImport, initializeFilters } from './ui.js';
-import { renderFileList, initializeStatusUpdate, initializeDelete } from './renderer.js';
+import { renderFileList, initializeStatusUpdate, initializeDelete, initializePagination } from './renderer.js';
 import { loadData } from './storageService.js';
 import { setFiles } from './dataService.js';
 
@@ -20,6 +20,7 @@ function initializeApp(): void {
   initializeFileAddition();
   initializeBulkImport();
   initializeFilters();
+  initializePagination();
   initializeStatusUpdate();
   initializeDelete();
   
