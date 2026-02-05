@@ -23,9 +23,18 @@ class PaginationService {
    * Initialize pagination with total item count
    */
   initialize(totalItems: number): void {
+    const previousTotalItems = this.state.totalItems;
     this.state.totalItems = totalItems;
     this.state.totalPages = Math.ceil(totalItems / this.state.itemsPerPage);
-    this.state.currentPage = 1; // Always reset to page 1 when initializing
+    
+    // Only reset to page 1 if total items changed or current page is invalid
+    if (previousTotalItems !== totalItems || this.state.currentPage > this.state.totalPages) {
+      this.state.currentPage = Math.min(this.state.currentPage, this.state.totalPages || 1);
+      // Reset to page 1 only if it was a different dataset
+      if (previousTotalItems !== totalItems) {
+        this.state.currentPage = 1;
+      }
+    }
   }
 
   /**
