@@ -1,4 +1,4 @@
-import { initializeFileAddition } from './ui';
+import { initializeFileAddition, initializeBulkImport, initializeFilters } from './ui';
 import { renderFileList, initializeStatusUpdate, initializeDelete } from './renderer';
 import { loadData } from './storageService';
 import { setFiles } from './dataService';
@@ -18,6 +18,8 @@ function initializeApp(): void {
   
   // Initialize UI components
   initializeFileAddition();
+  initializeBulkImport();
+  initializeFilters();
   initializeStatusUpdate();
   initializeDelete();
   
