@@ -174,12 +174,18 @@ textarea {
 /* File List */
 .file-list-section {
   margin-bottom: var(--spacing-xl);
+  /* Break out of main container constraints */
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  padding: 0;
 }
 
 .file-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(300px, 400px));
   gap: var(--spacing-md);
+  justify-content: center;
+  padding: 0 2rem;
 }
 
 /* Two columns on tablet */
