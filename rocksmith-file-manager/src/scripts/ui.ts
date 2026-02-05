@@ -1,6 +1,6 @@
-import { addFile, getFiles, filterFiles } from './dataService';
-import { renderFileList, renderFilteredFileList } from './renderer';
-import { parseCSV } from './csvParser';
+import { addFile, getFiles, filterFiles } from './dataService.js';
+import { renderFileList, renderFilteredFileList } from './renderer.js';
+import { parseCSV } from './csvParser.js';
 
 /**
  * Initializes the file addition UI

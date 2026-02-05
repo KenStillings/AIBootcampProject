@@ -1,4 +1,4 @@
-import type { RocksmithFile } from '../types/index';
+import type { RocksmithFile } from '../types/index.js';
 
 const STORAGE_KEY = 'rocksmith-file-manager-data';
 
