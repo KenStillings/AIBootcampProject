@@ -121,6 +121,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Coverage**: 99.23%
 - **Large Dataset**: 1,348 files now span 65 pages (previously 27 pages)
 
+#### Sprint 8: Centered Grid Layout
+- Centered file grid container on the page with equal left/right margins
+- Added `max-width: 1400px` to constrain grid width
+- Added `margin: 0 auto` for horizontal centering
+- Added `justify-items: center` to center items within columns
+- Added horizontal padding (2rem) for better spacing
+- Maintains responsive behavior at all breakpoints
+- Import tools and search/filter sections remain centered
+- **Test Results**: 122 tests passing across 6 test suites
+- **Coverage**: 99.23%
+
 ### Changed
 - Data model includes `lastModified` timestamp (Sprint 3)
 - File entries now use unique generated IDs instead of array indices
