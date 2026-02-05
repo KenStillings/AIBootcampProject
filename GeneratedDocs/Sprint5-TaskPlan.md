@@ -1,14 +1,14 @@
 # Sprint 5: Testing & Deployment
 
 **Sprint Duration**: Days 21-30 (Weeks 5-6)  
-**Sprint Goal**: Comprehensive testing and final deployment  
-**Total Estimated Time**: 20 hours
+**Sprint Goal**: Integration testing, coverage validation, and deployment  
+**Total Estimated Time**: 17 hours
 
 ---
 
 ## Sprint Overview
 
-This final sprint focuses on ensuring the application is robust, well-tested, and ready for production. The emphasis is on achieving 80% test coverage, comprehensive integration testing, and successful deployment. By the end of this sprint, the Rocksmith File Manager will be live and production-ready.
+This final sprint focuses on integration testing, coverage validation, end-to-end testing, and deployment preparation. Since unit tests were created alongside features in Sprints 3-4, this sprint emphasizes integration scenarios, coverage gap analysis, and production readiness. By the end of this sprint, the Rocksmith File Manager will be thoroughly tested and production-ready.
 
 ---
 
@@ -24,24 +24,24 @@ Before starting Sprint 5, ensure Sprint 4 is complete:
 
 ## Tasks
 
-### ✅ Task 5.1: Unit Testing
+### ✅ Task 5.1: Integration Testing & Coverage Validation
 
-**Estimated Time**: 8 hours  
+**Estimated Time**: 5 hours  
 **Priority**: High  
 **Dependencies**: All core features complete  
 **Status**: [ ] Not Started
 
 #### Subtasks Checklist
 
-- [ ] Set up testing framework (Jest or Vitest)
-- [ ] Configure coverage thresholds (80% minimum)
-- [ ] Write tests for data service (target: 100%)
-- [ ] Write tests for CSV parser (target: 100%)
-- [ ] Write tests for storage service (target: 100%)
-- [ ] Write tests for UI validation logic (target: 70%)
+- [ ] Run full test suite from Sprints 3-4
 - [ ] Generate coverage report
 - [ ] Review coverage gaps
-- [ ] Write additional tests to reach 80% threshold
+- [ ] Write integration tests for cross-module interactions
+- [ ] Test complete user workflows (add → update → delete → persist → reload)
+- [ ] Test bulk import integration
+- [ ] Test filter integration with rendering
+- [ ] Write additional tests for uncovered code paths
+- [ ] Ensure 80% coverage threshold is met
 - [ ] Fix bugs discovered during testing
 - [ ] Document any excluded code
 

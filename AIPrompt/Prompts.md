@@ -75,9 +75,17 @@ In the development plan, add requirements for testing. I'd like to see 80% test 
   - Coverage reporting requirements
   - Critical modules requiring 100% coverage
   - Test types required (unit, integration, edge cases)
-  - Enhanced testing tasks in Sprint 5
+  - Unit tests distributed across Sprints 3-4 (test alongside feature development)
+  - Integration testing and coverage validation in Sprint 5
   - Coverage validation steps
   - Testing commands and scripts
+
+**Testing Approach:**
+- Sprint 1: Testing framework setup
+- Sprint 2: Feature development (tests deferred)
+- Sprint 3: Status features + unit tests for Sprints 2-3
+- Sprint 4: Bulk import features + unit tests for Sprint 4
+- Sprint 5: Integration testing and coverage validation
 
 **Note:** Adjust the coverage percentage (80%) to match your project's requirements.
 
@@ -108,7 +116,7 @@ Using the DevelopmentPlan.md create a task plan for each of the sprints.
   - Code templates and examples
   - Acceptance criteria
   - Deliverables
-  - Testing notes
+  - Testing tasks (Sprints 3-4 include unit tests, Sprint 5 includes integration tests)
 - Sprint completion checklist
 - Integration tasks
 - Quality checks
@@ -184,6 +192,7 @@ Using the guidelines provided, please implement the tasks in Sprint1-TaskPlan.md
 - Creates project structure, package.json, tsconfig.json, jest.config.js
 - Sets up TypeScript types and interfaces
 - Creates HTML structure and CSS framework
+- Configures test framework with 80% coverage threshold
 
 **Sprint 2 - Core Functionality:**
 ```
@@ -193,6 +202,26 @@ Using the guidelines provided, please implement the tasks in Sprint2-TaskPlan.md
 - Creates UI event handlers and validation
 - Builds rendering logic for dynamic content
 - Sets up development server for testing
+- Note: Unit tests for Sprint 2 will be created in Sprint 3
+
+**Sprint 3 - Status Management & Unit Tests:**
+```
+Using the guidelines provided, please implement the tasks in Sprint3-TaskPlan.md
+```
+- Implements status updates and persistence
+- Creates comprehensive unit tests for Sprints 2-3 features
+- Achieves 80%+ test coverage for core modules
+- Validates all CRUD operations with tests
+
+**Sprint 4 - Bulk Import & Unit Tests:**
+```
+Using the guidelines provided, please implement the tasks in Sprint4-TaskPlan.md
+```
+- Implements CSV parser and bulk import
+- Creates search/filter functionality
+- Polishes UI with animations and enhancements
+- Adds unit tests for CSV parser and filters
+- Maintains 80%+ overall test coverage
 
 **When to Use:**
 - After completing all planning documentation
@@ -317,6 +346,18 @@ Create detailed user stories based on the features in CreatedIdeation.md
 ---
 
 ## Version History
+
+- **v1.3** (2026-02-05): Updated testing approach
+  - Unit tests now distributed across Sprints 3-4
+  - Tests written alongside features for better quality
+  - Sprint 5 focuses on integration testing and coverage validation
+  - Updated prompt examples to reflect test-driven development
+
+- **v1.3** (2026-02-05): Updated testing approach
+  - Unit tests now distributed across Sprints 3-4
+  - Tests written alongside features for better quality
+  - Sprint 5 focuses on integration testing and coverage validation
+  - Updated prompt examples to reflect test-driven development
 
 - **v1.2** (2026-02-05): Added Prompt 7 for sprint implementation
   - New prompt to execute actual coding tasks from sprint plans

@@ -1,8 +1,8 @@
 # Sprint 4: Bulk Import & Polish
 
 **Sprint Duration**: Days 16-20 (Week 4)  
-**Sprint Goal**: Implement CSV import and UI enhancements  
-**Total Estimated Time**: 14 hours
+**Sprint Goal**: Implement CSV import, UI enhancements, and unit tests  
+**Total Estimated Time**: 17 hours
 
 ---
 
@@ -758,6 +758,189 @@ Enhance mobile layout:
 
 ---
 
+### ✅ Task 4.5: Unit Tests for Sprint 4 Features
+
+**Estimated Time**: 3 hours  
+**Priority**: High  
+**Dependencies**: Tasks 4.1-4.4  
+**Status**: [ ] Not Started
+
+#### Subtasks Checklist
+
+- [ ] Create `tests/csvParser.test.ts`
+- [ ] Test newline-delimited parsing
+- [ ] Test comma-delimited parsing
+- [ ] Test format auto-detection
+- [ ] Test empty input handling
+- [ ] Test edge cases (empty lines, commas, whitespace)
+- [ ] Test `validateCSV()` function
+- [ ] Create `tests/filters.test.ts`
+- [ ] Test `filterFiles()` with search term
+- [ ] Test `filterFiles()` with status filter
+- [ ] Test combined filters
+- [ ] Run tests and verify coverage
+- [ ] Aim for 100% coverage on csvParser
+- [ ] Aim for 80%+ overall coverage
+
+#### CSV Parser Tests
+
+**tests/csvParser.test.ts**:
+```typescript
+import { parseCSV, validateCSV } from '../src/scripts/csvParser';
+
+describe('csvParser', () => {
+  describe('parseCSV', () => {
+    it('should parse newline-delimited string', () => {
+      const input = 'file1.psarc\nfile2.psarc\nfile3.psarc';
+      const result = parseCSV(input);
+      expect(result).toEqual(['file1.psarc', 'file2.psarc', 'file3.psarc']);
+    });
+
+    it('should parse comma-delimited string', () => {
+      const input = 'file1.psarc, file2.psarc, file3.psarc';
+      const result = parseCSV(input);
+      expect(result).toEqual(['file1.psarc', 'file2.psarc', 'file3.psarc']);
+    });
+
+    it('should handle comma-delimited without spaces', () => {
+      const input = 'file1.psarc,file2.psarc,file3.psarc';
+      const result = parseCSV(input);
+      expect(result).toEqual(['file1.psarc', 'file2.psarc', 'file3.psarc']);
+    });
+
+    it('should filter empty entries in comma format', () => {
+      const input = 'file1.psarc, , file2.psarc';
+      const result = parseCSV(input);
+      expect(result).toEqual(['file1.psarc', 'file2.psarc']);
+    });
+
+    it('should filter empty lines in newline format', () => {
+      const input = 'file1.psarc\n\nfile2.psarc\n\nfile3.psarc';
+      const result = parseCSV(input);
+      expect(result).toEqual(['file1.psarc', 'file2.psarc', 'file3.psarc']);
+    });
+
+    it('should return empty array for empty string', () => {
+      const result = parseCSV('');
+      expect(result).toEqual([]);
+    });
+
+    it('should return empty array for whitespace only', () => {
+      const result = parseCSV('   \n  \n   ');
+      expect(result).toEqual([]);
+    });
+
+    it('should trim whitespace from file names', () => {
+      const input = '  file1.psarc  \n  file2.psarc  ';
+      const result = parseCSV(input);
+      expect(result).toEqual(['file1.psarc', 'file2.psarc']);
+    });
+
+    it('should handle Windows line endings (\r\n)', () => {
+      const input = 'file1.psarc\r\nfile2.psarc\r\nfile3.psarc';
+      const result = parseCSV(input);
+      expect(result).toEqual(['file1.psarc', 'file2.psarc', 'file3.psarc']);
+    });
+
+    it('should handle large lists (1000+ files)', () => {
+      const files = Array.from({ length: 1000 }, (_, i) => `file${i}.psarc`);
+      const input = files.join('\n');
+      const result = parseCSV(input);
+      expect(result).toHaveLength(1000);
+    });
+  });
+
+  describe('validateCSV', () => {
+    it('should validate non-empty input', () => {
+      const result = validateCSV('file1.psarc\nfile2.psarc');
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+      expect(result.fileCount).toBe(2);
+    });
+
+    it('should reject empty input', () => {
+      const result = validateCSV('');
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContain('Input is empty');
+    });
+
+    it('should detect duplicates', () => {
+      const result = validateCSV('file1.psarc\nfile2.psarc\nfile1.psarc');
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.includes('Duplicate'))).toBe(true);
+    });
+  });
+});
+```
+
+#### Filter Tests
+
+**tests/filters.test.ts**:
+```typescript
+import { filterFiles, addFile, setFiles } from '../src/scripts/dataService';
+import type { RocksmithFile } from '../src/types/index';
+
+describe('filterFiles', () => {
+  beforeEach(() => {
+    setFiles([]);
+    addFile('ACDC_Thunderstruck.psarc');
+    addFile('Metallica_Enter-Sandman.psarc');
+    addFile('Queen_Bohemian-Rhapsody.psarc');
+    
+    // Update some statuses for testing
+    const files = filterFiles();
+    files[0].status = 'good';
+    files[1].status = 'bad';
+    files[2].status = 'untested';
+  });
+
+  it('should return all files with no filters', () => {
+    const result = filterFiles();
+    expect(result).toHaveLength(3);
+  });
+
+  it('should filter by search term (case-insensitive)', () => {
+    const result = filterFiles('metallica');
+    expect(result).toHaveLength(1);
+    expect(result[0].fileName).toContain('Metallica');
+  });
+
+  it('should filter by status', () => {
+    const result = filterFiles('', 'good');
+    expect(result).toHaveLength(1);
+    expect(result[0].status).toBe('good');
+  });
+
+  it('should combine search and status filters', () => {
+    const result = filterFiles('thunderstruck', 'good');
+    expect(result).toHaveLength(1);
+  });
+
+  it('should return empty array when no matches', () => {
+    const result = filterFiles('nonexistent');
+    expect(result).toHaveLength(0);
+  });
+});
+```
+
+#### Acceptance Criteria
+
+- CSV parser has 100% test coverage
+- All edge cases are tested
+- Filter functionality is thoroughly tested
+- All tests pass
+- Tests complete in < 5 seconds
+- Overall coverage is 80%+
+
+#### Deliverables
+
+- ✓ Complete test suite for CSV parser
+- ✓ Complete test suite for filters
+- ✓ 100% coverage on csvParser.ts
+- ✓ 80%+ overall coverage
+
+---
+
 ## Sprint 4 Completion Checklist
 
 ### Task Completion
@@ -765,6 +948,7 @@ Enhance mobile layout:
 - [ ] Task 4.2: Bulk import UI working ✓
 - [ ] Task 4.3: Search/filter functionality ✓
 - [ ] Task 4.4: UI polish complete ✓
+- [ ] Task 4.5: Unit tests for Sprint 4 ✓
 
 ### Quality Checks
 - [ ] Bulk import handles 100+ files smoothly

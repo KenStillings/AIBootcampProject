@@ -65,16 +65,17 @@
 **Goal**: Establish project structure and development environment
 
 ### Sprint 2: Core Functionality (Week 2)
-**Goal**: Implement basic file management and display
+**Goal**: Implement basic file management and display  
+**Note**: Unit tests for Sprint 2 features will be developed in Sprint 3
 
 ### Sprint 3: Status Management & Persistence (Week 3)
-**Goal**: Add status updates and data persistence
+**Goal**: Add status updates, data persistence, and unit tests for Sprints 2-3
 
 ### Sprint 4: Bulk Import & Polish (Week 4)
-**Goal**: Implement CSV import and UI enhancements
+**Goal**: Implement CSV import, UI enhancements, and unit tests for Sprint 4 features
 
 ### Sprint 5: Testing & Deployment (Weeks 5-6)
-**Goal**: Comprehensive testing and final deployment
+**Goal**: Integration testing, coverage validation, and deployment
 
 ---
 
@@ -192,6 +193,8 @@ export interface RocksmithFile {
 
 ## Sprint 2: Core Functionality (Days 6-10)
 
+**Testing Note**: Unit tests for Sprint 2 features will be developed in Sprint 3 alongside status management features. This allows for more comprehensive testing once the full CRUD operations are in place.
+
 ### Task 2.1: Implement Data Service
 **Estimated Time**: 4 hours  
 **Priority**: High  
@@ -276,6 +279,8 @@ export interface RocksmithFile {
 
 ## Sprint 3: Status Management & Persistence (Days 11-15)
 
+**Testing Focus**: This sprint includes comprehensive unit testing for all data service operations (Sprints 2-3), storage functionality, and ensures 80% coverage for core modules.
+
 ### Task 3.1: Implement Status Update Functionality
 **Estimated Time**: 4 hours  
 **Priority**: High  
@@ -348,6 +353,8 @@ export interface RocksmithFile {
 ---
 
 ## Sprint 4: Bulk Import & Polish (Days 16-20)
+
+**Testing Focus**: Unit tests for CSV parser and filter functionality to maintain 80%+ overall coverage.
 
 ### Task 4.1: Implement CSV Parser
 **Estimated Time**: 3 hours  
@@ -428,26 +435,53 @@ export interface RocksmithFile {
 
 ---
 
+### Task 4.5: Unit Tests for CSV Parser & Filters
+**Estimated Time**: 3 hours  
+**Priority**: High  
+**Dependencies**: Tasks 4.1-4.4
+
+**Subtasks**:
+- [ ] Create `tests/csvParser.test.ts`
+- [ ] Test newline-delimited parsing
+- [ ] Test comma-delimited parsing
+- [ ] Test edge cases (empty strings, whitespace, special characters)
+- [ ] Create `tests/filters.test.ts`
+- [ ] Test filterFiles() with search terms
+- [ ] Test filterFiles() with status filters
+- [ ] Test combined filters
+- [ ] Run coverage report
+- [ ] Ensure 100% coverage for csvParser.ts
+- [ ] Maintain 80%+ overall coverage
+
+**Coverage Targets**:
+- csvParser.ts: 100%
+- Filter functions: 80%+
+- Overall project: 80%+
+
+**Deliverables**: Complete test coverage for Sprint 4 features
+
+---
+
 ## Sprint 5: Testing & Deployment (Days 21-30)
 
-### Task 5.1: Unit Testing
-**Estimated Time**: 8 hours  
+**Testing Focus**: Integration testing, coverage gap analysis, and end-to-end workflow validation. Unit tests completed in Sprints 3-4.
+
+### Task 5.1: Integration Testing & Coverage Validation
+**Estimated Time**: 5 hours  
 **Priority**: High  
 **Dependencies**: All core features complete
 
 **Subtasks**:
-- [ ] Set up testing framework (Jest or Vitest)
-- [ ] Configure coverage thresholds in jest.config.js/vitest.config.ts:
-  ```javascript
-  coverageThreshold: {
-    global: {
-      statements: 80,
-      branches: 80,
-      functions: 80,
-      lines: 80
-    }
-  }
-  ```
+- [ ] Run full test suite from Sprints 3-4
+- [ ] Generate and review coverage report
+- [ ] Identify and fill coverage gaps
+- [ ] Create integration tests for multi-module workflows:
+  - Add file → update status → save → reload → verify
+  - Bulk import → filter → update statuses → persist
+  - Delete file → save → reload → verify removal
+- [ ] Test error scenarios and edge cases
+- [ ] Verify 80% coverage threshold is met
+- [ ] Fix any bugs discovered during testing
 - [ ] Write tests for data service functions (target: 100% coverage)
 - [ ] Write tests for CSV parser (target: 100% coverage)
 - [ ] Write tests for storage service (target: 100% coverage)
